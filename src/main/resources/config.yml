@@ -1,0 +1,133 @@
+#If a string option is empty, the default plugin message for that string will be displayed.
+
+# "[prefix]" will be replaced with the plugin's prefix.
+
+# "[perm]" will be replaced with the required permission for that action.
+
+# "[displayname]" will be replaced with the desired displayname.
+
+
+
+commandmessage: 
+
+  insufficientperms: "&cInsufficient permissions ([perm])."
+  
+  mustbevampire: "[prefix]&eYou must be a Vampire to execute that command."
+  
+  giveitem: "[prefix]&aItem successfully given."
+  
+  summon: 
+   
+    food: "[prefix]&eVampire food entities successfully summoned at [displayname]&e's location." #in this case, "[displayname]" will be the command executor's
+   
+    enemy: "[prefix]&eVampire enemy entities successfully summoned at [displayname]&e's location." #in this case, "[displayname]" will be the command executor's
+  
+  
+  vampirestatus:
+    
+    addsuccess: "[prefix]&eVampire status successfully applied."
+   
+    removesuccess: "[prefix]&eVampire status successfully removed."
+ 
+ 
+  vampiregodmode:
+    
+    enablesuccess: "[prefix]&eVampire god mode &aenabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+    
+    disablesuccess: "[prefix]&eVampire god mode &cdisabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+ 
+ 
+  vampirenocooldown:
+    
+    enablesuccess: "[prefix]&eVampire Stop Time cooldown &aenabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+    
+    disablesuccess: "[prefix]&eVampire Stop Time cooldown &cdisabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+
+
+
+stonemask: 
+  
+  enablecrafting: true
+ 
+  use: true
+ 
+  activation: true
+
+
+  
+customresourcepack:
+  
+  enabled: true
+ 
+  playerkick: "[prefix]&4&lERROR: &eYou &o&emust &euse the plugin's custom resource pack. Log in again and &o&eaccpet &e the resource pack."
+ 
+  downloadfailed: "[prefix]&6&lWARN: &eResource pack download failed. Retrying in 5 seconds."
+ 
+  accepted: "[prefix]&a&lINFO: &eResource pack accepted. Downloading..."
+
+  successenable: "[prefix]&a&lINFO: &eResource pack successfully enabled."
+
+
+  
+vampirebitingmessage:
+ 
+  eatingfooditem: 
+ 
+  bitingfoodentity: 
+ 
+  bitingenemyentity: 
+
+
+
+silversword: 
+
+  enablecrafting: true
+  
+  vampirehit: "&cAghn-! It's burning my skin! &4&o(Enemy Player is using a Silver Sword, inflicting triple damage! )"
+  
+  vampiredropsilversword: "&eAh-! That hurts! &7&o(Silver burns a Vampire's skin. Item Dropped.)" # the chat message sent to the vampire who is forced to drop the item
+
+
+  
+stoptime:
+
+  enable: true # the option to disable the Stop Time ability
+  
+  stoptimeclock:
+  
+    enablecrafting: true # the option to enable the crafting of the stop time clock, required for the activation of the Stop Time ability
+    
+  
+  vampiremessage: "&eYou have stopped time! &7&o(All entities in a radius of 30 blocks except you can not move for 10 seconds from now.)" # the chat message sent to the vampire who activated the ability when the Stop Time effect begins.
+  
+  vampireendmessage: "&eTime has started again. &7&o(All entities in a radius of 30 blocks except you can now act freely.)" # the chat message sent to the vampire who activated the ability when the Stop Time effect has ended.
+  
+  vampireready: "&eYou can now stop time." # the chat message sent to the vampire who previously activated the ability, once the cooldown has ended.
+  
+  vampirenotaffected:
+  
+    initialmessage: "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)"  # the chat message sent to the unaffected vampires when the Stop Time effect begins.
+    
+    finalmessage: "&6&lStop Time&e effect has ended."  # the chat message sent to the unaffected vampires when the Stop Time effect has ended.
+    
+  playerinitialmessage: "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)"  # the chat message sent to the affected players when the Stop Time effect begins.
+  
+  playerfinalmessage: "&eStop Time effect has ended. &7&o(You can now move again.)" # the chat message sent to the affected players when the Stop Time effect has ended.
+  
+  playerdroptimeclock: "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)" # the chat message sent to the player who is forced to drop the item
+  
+
+
+vampiresundamage:
+
+  titlemessage: "&e&lYOU ARE EXPOSED TO SUNLIGHT!!!" # the title of the screen message displayed to the vampire exposed to sunlight
+  
+  subtitlemessage:  "&6HURRY UP AND FIND COVER!" # the subtitle of the screen message displayed to the vampire exposed to sunlight
+  
+  deathmessage: "&eThe sunlight burned [displayname] &eaway..." # the chat message sent publicly on the event of a vampire dead 'cause of sunlight exposure. In this case, "[displayname]" will be the dead vampire's
+
+
+  
+vampiredoublejump: # the option to enable or disable the vampire's ability to double jump.
+
+  enable: true
