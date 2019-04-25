@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -80,7 +81,7 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		}
 		
 		if(stoptimeCooldown.contains(id)) {
-			// No cooldown for this player, they are immune
+			// No cooldown for this player, he is immune
 			if(plugin.noStoptimeCooldown().contains(id)) {
 				stoptimeCooldown.remove(id);
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireready",
@@ -100,9 +101,10 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		
 		// Player sound & message to vampire
 		p.playSound(p.getLocation(), "vampires.stoptime", SoundCategory.MASTER, 0.3F, 1.0F);
+		p.sendMessage(" ");
 		p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampiremessage",
 				"&eYou have stopped time! &7&o(All entities in a radius of 20 blocks except you can not move for 10 seconds from now.)")));
-		
+		p.sendMessage(" ");
 		// Freeze players & entities (send message & play sound)
 		for(Entity en : entities) {
 			if (en instanceof Player && !unaffectedPlayers.contains(en.getUniqueId())) {
@@ -114,13 +116,22 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 				other.playSound(other.getLocation(), "vampires.stoptime", SoundCategory.MASTER, 0.3F, 1.0F);
 				if(plugin.getVampires().contains(other.getUniqueId())) {
 					unaffectedPlayers.add(other.getUniqueId());
+					other.sendMessage(" ");
 					other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampirenotaffected.initialmessage",
 							"&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)")));
+					other.sendMessage(" ");
 					
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 						unaffectedPlayers.remove(other.getUniqueId());
+						other.sendMessage(" ");
 						other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampirenotaffected.finalmessage",
 								"&6&lStop Time &e effect has ended.")));
+						other.sendMessage(" ");
+
+						p.sendMessage(" ");
+						p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireendmessage",
+								"&eTime has started again. &7&o(All entities in a radius of 20 blocks except you can now act freely.)")));
+						p.sendMessage(" ");
 					}, 220L);
 					return;
 				}
@@ -133,8 +144,10 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 						other.setFlySpeed(0F);
 						other.setWalkSpeed(0F);
 						other.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 128, false, false, false));
+						other.sendMessage(" ");
 						other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.playerinitialmessage",
 								"&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)")));
+						other.sendMessage(" ");
 					}, 20L);
 					
 				}
@@ -145,8 +158,10 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 					other.setInvulnerable(false);
 					other.setFlySpeed(0.1F);
 					other.setWalkSpeed(0.2F);
+					other.sendMessage(" ");
 					other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.playerfinalmessage",
 							"&6&lStop Time &eeffect has ended. &7&o(You can now move again.)")));
+					other.sendMessage(" ");
 				}, 220L);
 				
 			} else if(en instanceof LivingEntity) {
@@ -168,8 +183,10 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		
 		// Unfreeze everybody message
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			p.sendMessage(" ");
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireendmessage",
 					"&eTime has started again. &7&o(All entities in a radius of 20 blocks except you can now act freely.)")));
+			p.sendMessage(" ");
 		}, 220L);
 		
 		// Remove player's ability timeout
@@ -200,6 +217,19 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 			if(affectedPlayers.contains(p.getUniqueId())) {
 				e.setCancelled(true);
 			}	
+		}
+	}
+
+	@EventHandler
+	public void onPlayerQuitDuringStopTime (PlayerQuitEvent e){
+		Player p = e.getPlayer();
+		if(affectedPlayers.contains(p.getUniqueId())){
+			affectedPlayers.remove(p.getUniqueId());
+			p.setWalkSpeed(0.2F);
+			p.setFlySpeed(0.1F);
+		}
+		if(plugin.getVampires().contains(p.getUniqueId()) && unaffectedPlayers.contains(p.getUniqueId())) {
+			unaffectedPlayers.remove(p.getUniqueId());
 		}
 	}
 	

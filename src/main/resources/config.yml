@@ -1,14 +1,47 @@
-#If a string option is empty, the default plugin message for that string will be displayed.
+############################################################
+# +------------------------------------------------------+ #
+# |                   Important Notes                    | #
+# +------------------------------------------------------+ #
+############################################################
 
-# "[prefix]" will be replaced with the plugin's prefix.
 
-# "[perm]" will be replaced with the required permission for that action.
+# If you want to use special characters in this config, such as accented letters, you must save the file as UTF-8, not ANSI.
 
-# "[displayname]" will be replaced with the desired displayname.
+# If you receive an error when VampireS loads, check and ensure that:
+#   - There are no tabs: YAML only allows spaces.
+#   - Indents are correct: YAML structure is based entirely on indentation.
+#   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe).
+#   - Text with symbols is enclosed in single or double quotation marks.
+#   - Boolean options must have at least one value: true or false.
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  String Instructions                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+
+# All string messages support Minecraft formatting codes, you can use, for example, "&cHello World!" to send a completely light red string.
+# If you want to look at Minecraft's formatting codes to use them, visit this page:
+# https://minecraft.gamepedia.com/Formatting_codes
+
+# If you leave a string option empty, the plugin will use the default one.
+# To leave a string empty, just don't write ANYTHING on the part after the ":" of a string option.
+# Leaving something like {""} will result in an empty message.
+
+# "[prefix]" will be replaced with the plugin's prefix. ( the prefix is: "&7&l[&c&lVampireS&7&l] &8> " )
+
+# "[perm]" will be replaced with the permission required to perform that action.
+
+# "[displayname]" will be replaced with the involved player's displayname.
+
 
 
 
 commandmessage: 
+
+  console-cannot-perform: "[prefix]&cThis command cannot be executed by the Console."
 
   insufficientperms: "&cInsufficient permissions ([perm])."
   
@@ -44,21 +77,35 @@ commandmessage:
     disablesuccess: "[prefix]&eVampire Stop Time cooldown &cdisabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
 
 
-
-stonemask: 
-  
-  enablecrafting: true
- 
-  use: true
- 
-  activation: true
-
-
   
 customresourcepack:
   
   enabled: true
- 
+
+    # Here goes the NUMBERED ip of the server the plugin is installed in.
+    server-ip: "2.232.253.249"
+
+    # The port 41000 is normally unused, but if it's used, insert another port.
+    # The default port used by the plugin is 41000;
+    download-port: 41000
+
+  join:
+
+    can-send-question: "&7Do you want to download our custom resource pack?"
+
+    what-does-it-do: "&7By rejecting the resource pack, you won't be able to see CustomItems, CustomBlocks & CustomTiles"
+
+    accept: "&a&lACCEPT"
+
+    reject: "&c&lREJECT"
+
+    click-to-accept: "&7Click to accept"
+
+    click-to-reject: "&7Click to reject"
+
+    rejected-successfully: "[prefix]&aCustom Resource Pack rejected successfully."
+
+
   playerkick: "[prefix]&4&lERROR: &eYou &o&emust &euse the plugin's custom resource pack. Log in again and &o&eaccpet &e the resource pack."
  
   downloadfailed: "[prefix]&6&lWARN: &eResource pack download failed. Retrying in 5 seconds."
@@ -68,10 +115,13 @@ customresourcepack:
   successenable: "[prefix]&a&lINFO: &eResource pack successfully enabled."
 
 
-  
+
+# The chat messages sent to a vampire when he bites an entity to gain food levels.
+# (the vampire must have his main hand empty when hitting an entity to trigger the biting action)
 vampirebitingmessage:
- 
-  eatingfooditem: 
+
+  # The chat message sent to the vampire when he eats normal food, cake block included.
+  eatingfooditem:
  
   bitingfoodentity: 
  
@@ -79,55 +129,93 @@ vampirebitingmessage:
 
 
 
-silversword: 
+stonemask:
 
   enablecrafting: true
-  
+
+  use: true
+
+  activation: true
+
+
+
+silversword:
+
+  # The option to enable or disable the crafting of the Silver Sword, who can only damage Vampires, inflicting them triple damage.
+  enablecrafting: true
+
+  # The chat message sent to the vampire who is being hit by a Silver Sword.
   vampirehit: "&cAghn-! It's burning my skin! &4&o(Enemy Player is using a Silver Sword, inflicting triple damage! )"
-  
-  vampiredropsilversword: "&eAh-! That hurts! &7&o(Silver burns a Vampire's skin. Item Dropped.)" # the chat message sent to the vampire who is forced to drop the item
+
+  # The chat message sent to the vampire who is forced to drop the item (Only NON-VAMPIRES can have the Silver Sword in their inventory).
+  vampiredropsilversword: "&eAh-! That hurts! &7&o(Silver burns a Vampire's skin. Item Dropped.)"
 
 
   
 stoptime:
 
-  enable: true # the option to disable the Stop Time ability
+  # The option to enable or disable the Stop Time ability.
+  enable: true
   
   stoptimeclock:
-  
-    enablecrafting: true # the option to enable the crafting of the stop time clock, required for the activation of the Stop Time ability
-    
-  
-  vampiremessage: "&eYou have stopped time! &7&o(All entities in a radius of 30 blocks except you can not move for 10 seconds from now.)" # the chat message sent to the vampire who activated the ability when the Stop Time effect begins.
-  
-  vampireendmessage: "&eTime has started again. &7&o(All entities in a radius of 30 blocks except you can now act freely.)" # the chat message sent to the vampire who activated the ability when the Stop Time effect has ended.
-  
-  vampireready: "&eYou can now stop time." # the chat message sent to the vampire who previously activated the ability, once the cooldown has ended.
-  
-  vampirenotaffected:
-  
-    initialmessage: "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)"  # the chat message sent to the unaffected vampires when the Stop Time effect begins.
-    
-    finalmessage: "&6&lStop Time&e effect has ended."  # the chat message sent to the unaffected vampires when the Stop Time effect has ended.
-    
-  playerinitialmessage: "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)"  # the chat message sent to the affected players when the Stop Time effect begins.
-  
-  playerfinalmessage: "&eStop Time effect has ended. &7&o(You can now move again.)" # the chat message sent to the affected players when the Stop Time effect has ended.
-  
-  playerdroptimeclock: "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)" # the chat message sent to the player who is forced to drop the item
-  
 
+    # The option to enable or disable the crafting of the Stop Time Clock, required for the activation of the Stop Time ability.
+    enablecrafting: true
+
+  # The chat message sent to the vampire who activated the ability when the Stop Time effect begins.
+  vampiremessage: "&eYou have stopped time! &7&o(All entities in a radius of 30 blocks except you can not move for 10 seconds from now.)"
+
+  # The chat message sent to the vampire who activated the ability when the Stop Time effect ends.
+  vampireendmessage: "&eTime has started again. &7&o(All entities in a radius of 30 blocks except you can now act freely.)"
+
+  # The chat message sent to the vampire who previously activated the ability, once the cooldown ends.
+  # (the plugin's default message is "&eYou can now stop time.")
+  vampireready: "&eYou can now stop time."
+
+  # The chat messages a Vampire that is in the Stop Time ability's range when activated.
+  # (The Vampire receiving these messages is not the one who activated the ability)
+  vampirenotaffected:
+
+    # The chat message sent to the unaffected vampires when the Stop Time effect begins.
+    # (the plugin's default message is "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)")
+    initialmessage: "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)"
+
+    # The chat message sent to the unaffected vampires when the Stop Time effect ends.
+    # (the plugin's default message is "&6&lStop Time&e effect has ended.")
+    finalmessage: "&6&lStop Time&e effect has ended."
+
+  # The chat message sent to the affected players when the Stop Time effect begins.
+  # (the plugin's default message is "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)")
+  playerinitialmessage: "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)"
+
+  # The chat message sent to the affected players when the Stop Time effect ends.
+  # (the plugin's default message is "&eStop Time effect has ended. &7&o(You can now move again.)")
+  playerfinalmessage: "&eStop Time effect has ended. &7&o(You can now move again.)"
+
+  # The chat message sent to the player who is forced to drop the item (Only VAMPIRES can have the Stop Time Clock in their inventory).
+  # (the plugin's default message is "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)")
+  playerdroptimeclock: "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)"
+  
 
 vampiresundamage:
 
-  titlemessage: "&e&lYOU ARE EXPOSED TO SUNLIGHT!!!" # the title of the screen message displayed to the vampire exposed to sunlight
-  
-  subtitlemessage:  "&6HURRY UP AND FIND COVER!" # the subtitle of the screen message displayed to the vampire exposed to sunlight
-  
-  deathmessage: "&eThe sunlight burned [displayname] &eaway..." # the chat message sent publicly on the event of a vampire dead 'cause of sunlight exposure. In this case, "[displayname]" will be the dead vampire's
+  # The title of the screen message displayed to the vampire exposed to sunlight.
+  # (the plugin's default message is "&e&lYOU ARE EXPOSED TO SUNLIGHT!!!")
+  titlemessage: "&e&lYOU ARE EXPOSED TO SUNLIGHT!!!"
+
+  # The subtitle of the screen message displayed to the vampire exposed to sunlight.
+  # (the plugin's default message is "&6HURRY UP AND FIND COVER!")
+  subtitlemessage:  "&6HURRY UP AND FIND COVER!"
+
+  # The chat message sent publicly on the event of a vampire dead due to sunlight exposure.
+  # In this case, "[displayname]" will be the dead vampire's.
+  # (the plugin's default message is "&eThe sunlight burned [displayname] &eaway...")
+  deathmessage: "&eThe sunlight burned [displayname] &eaway..."
 
 
   
-vampiredoublejump: # the option to enable or disable the vampire's ability to double jump.
+vampiredoublejump:
 
+  # the option to enable or disable the vampire's ability to double jump.
+  # (the default value is true)
   enable: true

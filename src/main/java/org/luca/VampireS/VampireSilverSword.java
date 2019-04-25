@@ -15,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class VampireSilverSwordDamage implements Listener, Runnable {
+public class VampireSilverSword implements Listener, Runnable {
 	
 	private final MainClass plugin;
 	
-	public VampireSilverSwordDamage(MainClass plugin) {
+	public VampireSilverSword(MainClass plugin) {
 		this.plugin = plugin;
 	}
 

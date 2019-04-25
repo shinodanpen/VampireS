@@ -20,10 +20,13 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.luca.VampireS.customResourcePack.CustomResourcePack;
+import org.luca.VampireS.customResourcePack.ResourcePackCommands.ResourcePackAccept;
+import org.luca.VampireS.customResourcePack.ResourcePackCommands.ResourcePackReject;
 
 
 public class MainClass extends JavaPlugin {
-	String plPrefix = "&7&l[&c&lVampireS&7&l] &8> ";
+	public String plPrefix = "&7&l[&c&lVampireS&7&l] &8> ";
 	private List<UUID> vampires = new ArrayList<>();
 	private List<UUID> gods = new ArrayList<>();
 	private List<UUID> noCooldown = new ArrayList<>();
@@ -52,13 +55,12 @@ public class MainClass extends JavaPlugin {
 		
 		this.getCommand("vampires").setExecutor(new VampiresCommand(this));
 
-		VampireSilverSwordDamage silverSword = new VampireSilverSwordDamage(this);
+		VampireSilverSword silverSword = new VampireSilverSword(this);
 		VampireStopTimeAbility stoptimeClock = new VampireStopTimeAbility(this);
 		
 		getServer().getPluginManager().registerEvents(new OnStonemaskUse(this), this);
 		getServer().getPluginManager().registerEvents(new OnStonemaskActivation(this), this);
 		getServer().getPluginManager().registerEvents(new VampireBiteTransformation(this), this);
-		getServer().getPluginManager().registerEvents(new CustomResourcePack(this), this);
 		getServer().getPluginManager().registerEvents(silverSword, this);
 		getServer().getPluginManager().registerEvents(stoptimeClock, this);
 		

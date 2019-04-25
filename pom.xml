@@ -15,8 +15,14 @@
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
 
+        <!-- https://mvnrepository.com/artifact/io.vertx/vertx-core -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
