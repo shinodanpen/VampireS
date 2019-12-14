@@ -1,4 +1,4 @@
-package org.luca.VampireS.customResourcePack;
+package org.luca.VampireS.resourcepack;
 
 import java.security.SecureRandom;
 import java.util.HashMap;

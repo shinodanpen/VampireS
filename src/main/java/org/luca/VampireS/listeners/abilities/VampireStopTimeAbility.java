@@ -1,9 +1,7 @@
-package org.luca.VampireS;
+package org.luca.VampireS.listeners.abilities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,12 +23,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.collect.ImmutableList;
+import org.luca.VampireS.VampireSPlugin;
+import org.valdi.SuperApiX.bukkit.users.SimpleUser;
+import org.valdi.SuperApiX.bukkit.users.User;
 
 public class VampireStopTimeAbility implements Listener, Runnable {
 	
-	private final MainClass plugin;
+	private final VampireSPlugin plugin;
 
-	public VampireStopTimeAbility(MainClass plugin) {
+	public VampireStopTimeAbility(VampireSPlugin plugin) {
 		this.plugin = plugin;
 	}
 	
@@ -45,22 +46,21 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 			Material.JUNGLE_DOOR, Material.OAK_DOOR, Material.SPRUCE_DOOR, Material.LEVER, Material.FURNACE, Material.CHEST, Material.CRAFTING_TABLE,
 			Material.DROPPER, Material.DISPENSER, Material.DAYLIGHT_DETECTOR, Material.ANVIL, Material.CHIPPED_ANVIL, Material.DAMAGED_ANVIL,
 			Material.BEACON, Material.COMPARATOR, Material.COMMAND_BLOCK, Material.HOPPER, Material.TRAPPED_CHEST, Material.ENCHANTING_TABLE,
-			Material.ENDER_CHEST, Material.END_PORTAL_FRAME, Material.END_GATEWAY, Material.ITEM_FRAME, Material.FLOWER_POT, Material.SIGN,
+			Material.ENDER_CHEST, Material.END_PORTAL_FRAME, Material.END_GATEWAY, Material.ITEM_FRAME,
 			Material.ARMOR_STAND, Material.BLACK_BED, Material.BLUE_BED, Material.BROWN_BED, Material.CYAN_BED, Material.GRAY_BED, Material.GREEN_BED,
 			Material.LIGHT_BLUE_BED, Material.LIGHT_GRAY_BED, Material.LIME_BED, Material.MAGENTA_BED, Material.ORANGE_BED, Material.PINK_BED,
 			Material.PURPLE_BED, Material.RED_BED, Material.WHITE_BED, Material.YELLOW_BED, Material.JUKEBOX, Material.NOTE_BLOCK,
-			Material.REPEATER, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK, Material.TURTLE_EGG, Material.CONDUIT,
+			Material.REPEATER, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK,
 			Material.SHULKER_BOX, Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX,
 			Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX, Material.LIME_SHULKER_BOX,
 			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
-			Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.CAKE, Material.CAULDRON, Material.BREWING_STAND, Material.TRIPWIRE_HOOK,
-			Material.TRIPWIRE);
+			Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.BREWING_STAND);
 	
 	private List<UUID> stoptimeCooldown = new ArrayList<>();
 
 	@EventHandler
 	public void StopTimeAbility (PlayerInteractEvent e) {
-		if(!plugin.getConfig().getBoolean("stoptime.enable")) {
+		if(!plugin.getConfig().isStoptimeEnable()) {
 			return;
 		}
 		
@@ -69,25 +69,39 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		}
 
 		Player p = e.getPlayer();
+		User user = SimpleUser.getInstance(p);
 		UUID id = p.getUniqueId();
+		int playerlevel = p.getLevel();
+
 		if(!plugin.getVampires().contains(id) || !p.isSneaking()
 				|| !(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
-				|| !plugin.isStopTimeClock(p.getInventory().getItemInMainHand())) {
+				|| !plugin.getItemManager().isStopTimeClock(e.getItem())){
 			return;
 		}
-		
+
+		if(!plugin.getStoptimevampire().contains(p.getUniqueId())){
+			user.sendMessage(plugin, "stoptime.donthaveability");
+			return;
+		}
+
 		if(e.getClickedBlock() != null && noBlocks.contains(e.getClickedBlock().getType())) {
+			return;
+		}
+
+		if(user.getPlayer().getLevel() < 30 && !plugin.noExpReq().contains(id)){
+			user.sendMessage(plugin, "stoptime.experienceinsufficient");
 			return;
 		}
 		
 		if(stoptimeCooldown.contains(id)) {
 			// No cooldown for this player, he is immune
-			if(plugin.noStoptimeCooldown().contains(id)) {
+			if(plugin.noCooldown().contains(id)) {
 				stoptimeCooldown.remove(id);
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireready",
-						"&eYou can now stop time.")));
+				user.sendMessage(plugin, "stoptime.vampireready");
 				return;
 			}
+			else
+				user.sendMessage(plugin, "stoptime.cooldown");
 			
 			return;
 		}
@@ -97,13 +111,14 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		unaffectedPlayers.add(id);
 		
 		// Get nearby entities
-		Collection<Entity> entities = p.getWorld().getNearbyEntities(p.getLocation(), 20D, 20D, 20D);
+		Collection<Entity> entities = p.getWorld().getNearbyEntities(p.getLocation(), 50D, 50D, 50D);
 		
 		// Player sound & message to vampire
+		int newlevel = playerlevel-30;
+		p.setLevel(newlevel);
 		p.playSound(p.getLocation(), "vampires.stoptime", SoundCategory.MASTER, 0.3F, 1.0F);
 		p.sendMessage(" ");
-		p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampiremessage",
-				"&eYou have stopped time! &7&o(All entities in a radius of 20 blocks except you can not move for 10 seconds from now.)")));
+		user.sendMessage(plugin, "stoptime.vampiremessage");
 		p.sendMessage(" ");
 		// Freeze players & entities (send message & play sound)
 		for(Entity en : entities) {
@@ -113,91 +128,85 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 				}
 				
 				Player other = (Player) en;
+				User target = SimpleUser.getInstance(other);
 				other.playSound(other.getLocation(), "vampires.stoptime", SoundCategory.MASTER, 0.3F, 1.0F);
 				if(plugin.getVampires().contains(other.getUniqueId())) {
 					unaffectedPlayers.add(other.getUniqueId());
 					other.sendMessage(" ");
-					other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampirenotaffected.initialmessage",
-							"&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)")));
+					target.sendMessage(plugin, "stoptime.vampirenotaffected.initialmessage");
 					other.sendMessage(" ");
 					
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+					plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 						unaffectedPlayers.remove(other.getUniqueId());
 						other.sendMessage(" ");
-						other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampirenotaffected.finalmessage",
-								"&6&lStop Time &e effect has ended.")));
+						target.sendMessage(plugin, "stoptime.vampirenotaffected.finalmessage");
 						other.sendMessage(" ");
 
 						p.sendMessage(" ");
-						p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireendmessage",
-								"&eTime has started again. &7&o(All entities in a radius of 20 blocks except you can now act freely.)")));
+						target.sendMessage(plugin, "stoptime.vampireendmessage");
 						p.sendMessage(" ");
-					}, 220L);
+					}, 11L, TimeUnit.SECONDS);
 					return;
 				}
 				if(!unaffectedPlayers.contains(other.getUniqueId())) {
 					affectedPlayers.add(other.getUniqueId());
 					
 					// Freeze & message
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+					plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 						other.setInvulnerable(true);
 						other.setFlySpeed(0F);
 						other.setWalkSpeed(0F);
 						other.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 128, false, false, false));
 						other.sendMessage(" ");
-						other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.playerinitialmessage",
-								"&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)")));
+						target.sendMessage(plugin, "stoptime.playerinitialmessage");
 						other.sendMessage(" ");
-					}, 20L);
+					}, 1L, TimeUnit.SECONDS);
 					
 				}
 				
 				// Unfreeze & message
-				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 					affectedPlayers.remove(other.getUniqueId());
 					other.setInvulnerable(false);
 					other.setFlySpeed(0.1F);
 					other.setWalkSpeed(0.2F);
 					other.sendMessage(" ");
-					other.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.playerfinalmessage",
-							"&6&lStop Time &eeffect has ended. &7&o(You can now move again.)")));
+					target.sendMessage(plugin, "stoptime.playerfinalmessage");
 					other.sendMessage(" ");
-				}, 220L);
+				}, 11L, TimeUnit.SECONDS);
 				
 			} else if(en instanceof LivingEntity) {
 				LivingEntity le = (LivingEntity) en;
 				
 				// Freeze
-				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 					le.setInvulnerable(true);
 					le.setAI(false);
-				}, 20L);
+				}, 1L, TimeUnit.SECONDS);
 				
 				// Unfreeze
-				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 					le.setInvulnerable(false);
 					le.setAI(true);
-				}, 220L);
+				}, 11L, TimeUnit.SECONDS);
 			}
 		}
 		
 		// Unfreeze everybody message
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 			p.sendMessage(" ");
-			p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireendmessage",
-					"&eTime has started again. &7&o(All entities in a radius of 20 blocks except you can now act freely.)")));
+			user.sendMessage(plugin, "stoptime.vampireendmessage");
 			p.sendMessage(" ");
-		}, 220L);
+		}, 11L, TimeUnit.SECONDS);
 		
 		// Remove player's ability timeout
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+		plugin.getScheduler().scheduleSyncDelayedTask(() -> {
 			if(p != null && p.isOnline() && stoptimeCooldown.contains(id)) {
 //				if(!plugin.noStoptimeCooldown().contains(id)) {
 				stoptimeCooldown.remove(id);
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.vampireready",
-						"&eYou can now stop time.")));
+				user.sendMessage(plugin, "stoptime.ready");
 			}
-		}, 12000L);
+		}, 30L, TimeUnit.MINUTES);
 	}
 	
 	@EventHandler
@@ -241,13 +250,13 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			if(!plugin.getVampires().contains(player.getUniqueId())) {
 				ItemStack offHand = player.getInventory().getItemInOffHand();
-				if(plugin.isStopTimeClock(offHand)) {
+				if(plugin.getItemManager().isStopTimeClock(offHand)) {
 					player.getInventory().setItemInOffHand(null);
 					this.dropItem(player, offHand);
 				}
 				
 				for(ItemStack item : player.getInventory().getContents()) {
-					if(plugin.isStopTimeClock(item)) {
+					if(plugin.getItemManager().isStopTimeClock(item)) {
 						player.getInventory().remove(item);
 						this.dropItem(player, item);
 					}
@@ -257,10 +266,11 @@ public class VampireStopTimeAbility implements Listener, Runnable {
 	}
 	
 	private void dropItem(Player player, ItemStack item) {
-		Bukkit.getScheduler().runTask(plugin, () -> {
+		plugin.getScheduler().runTask(() -> {
 			Item drop = player.getWorld().dropItemNaturally(player.getLocation(), item);
 			drop.setPickupDelay(40);
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("stoptime.playerdropstoptimeclock", "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)")));
+			User user = SimpleUser.getInstance(player);
+			user.sendMessage(plugin, "stoptime.playerdropstoptimeclock");
 		});
 	}
 	

@@ -1,0 +1,185 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                  String Instructions                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+
+# All string messages support Minecraft formatting codes, you can use, for example, "&cHello World!" to send a completely light red string.
+# If you want to look at Minecraft's formatting codes to use them, visit this page:
+# https://minecraft.gamepedia.com/Formatting_codes
+
+# If you leave a string option empty, the plugin will use the default one.
+# To leave a string empty, just don't write ANYTHING on the part after the ":" of a string option.
+# Leaving something like {""} will result in an empty message.
+
+# "[prefix]" will be replaced with the plugin's prefix. ( the prefix is: "&7&l[&c&lVampireS&7&l] &8> " )
+
+# "[perm]" will be replaced with the permission required to perform that action.
+
+# "[displayname]" will be replaced with the involved player's displayname.
+commands:
+  header: "&7===========[prefix]&7==========="
+  end: "&7================================"
+  vampires:
+    help:
+      parameters: ""
+      description: ""
+    give:
+      parameters: "<item> [player]"
+      description: "&7Give item to self or target."
+      success: "[prefix] &eItem successfully given to [name]"
+    nocooldown:
+      parameters: "<enable|disable> [player]"
+      description: "&7Enable or disable ability cooldown."
+      enable: "[prefix] &eAbility cooldown &aenabled &efor [name]"
+      disable: "[prefix] &eAbility cooldown &cdisabled &efor [name]"
+    noexpreq:
+      parameters: "<enable|disable> [player]"
+      description: "&7Enable or disable ability exp level requirements."
+      enable: "[prefix] &eAbility experience requirement &aenabled &efor [name]"
+      disable: "[prefix] &eAbility experience requirement &cdisabled &efor [name]"
+    godmode:
+      parameters: "<enable|disable> [player]"
+      description: "&7Enable or disable Vampire God mode."
+      enable: "[prefix] &eVampire God Mode &aenabled &efor [name]"
+      disable: "[prefix] &eVampire God Mode &cdisabled &efor [name]"
+    status:
+      parameters: "<add|remove> [player]"
+      description: "&7Change a player's Vampire Status"
+      add: "[prefix] &eSuccessfully transformed [name] &einto a vampire"
+      remove: "[prefix] &eSuccessfully transformed [name] &einto a human"
+      alreadyvampire: "[prefix] [name] &cis already a vampire."
+      notvampire: "[prefix] [name] &cis not a vampire."
+    ability:
+      parameters: "<set|remove> <all|ability> [player]"
+      description: "&7Edit a Vampire's current ability."
+      set: "[prefix] &eAbility set to Vampire [name]"
+      remove: "[prefix] &eAbility removed from Vampire [name]"
+      info: "[prefix] &eVampire [name]&e's ability is [ability]&e."
+      vampirehasnoability: "[prefix] [name] &chas no Abilities."
+      alreadyhave: "[prefix] &eVampire [name] &ealready has that Ability."
+      donthave: "[prefix] &eVampire [name] &edoesn't have that Ability."
+      notvampire: "[prefix] [name] &cis not a vampire."
+  unknown-command: "[prefix] &cUnknown command."
+  incorrect-syntax: "[prefix]&cInvalid command syntax."
+  console-cannot-perform: "[prefix]&cThis command cannot be executed by the Console."
+  insufficientperms: "&cInsufficient permissions ([perm])."
+  mustbevampire: "[prefix]&eYou must be a Vampire to execute that command."
+  giveitem: "[prefix]&aItem successfully given."
+  summon:
+    food: "[prefix]&eVampire food entities successfully summoned at [displayname]&e's location." #in this case, "[displayname]" will be the command executor's
+    enemy: "[prefix]&eVampire enemy entities successfully summoned at [displayname]&e's location." #in this case, "[displayname]" will be the command executor's
+  vampirestatus:
+    addsuccess: "[prefix]&eVampire status successfully applied."
+    removesuccess: "[prefix]&eVampire status successfully removed."
+  vampiregodmode:
+    enablesuccess: "[prefix]&eVampire god mode &aenabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+    disablesuccess: "[prefix]&eVampire god mode &cdisabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+  vampirenocooldown:
+    enablesuccess: "[prefix]&eVampire Stop Time cooldown &aenabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+    disablesuccess: "[prefix]&eVampire Stop Time cooldown &cdisabled &efor [displayname]." #in this case, "[displayname]" will be the command executor's
+
+resourcepack:
+  join:
+    can-send-question: "&7Do you want to download our custom resource pack?"
+    what-does-it-do: "&7By rejecting the resource pack, you won't be able to see the plugin's custom textures & models."
+    accept: "&a&lACCEPT"
+    reject: "&c&lREJECT"
+    click-to-accept: "&7Click to accept"
+    click-to-reject: "&7Click to reject"
+    rejected-successfully: "[prefix]&aCustom Resource Pack rejected successfully."
+  player-kick: "[prefix]&4&lERROR: &eYou &o&emust &euse the plugin's custom resource pack. Log in again and accept the resource pack."
+  declined: "[prefix]&4&lERROR: &e&eYou &o&emust &euse the plugin's custom resource pack. Log in again with Server-Resource-Packs enabled."
+  download-failed: "[prefix]&6&lWARN: &eResource pack download failed. Retrying in 5 seconds."
+  accepted: "[prefix]&a&lINFO: &eResource pack accepted. Downloading..."
+  success-enable: "[prefix]&a&lINFO: &eResource pack successfully enabled."
+
+silversword:
+  # The chat message sent to the vampire who is being hit by a Silver Sword.
+  vampirehit: "&cAghn-! It's burning my skin! &4&o(Enemy Player is using a Silver Sword, inflicting triple damage! )"
+  # The chat message sent to the vampire who is forced to drop the item (Only NON-VAMPIRES can have the Silver Sword in their inventory).
+  vampiredropsilversword: "&eAh-! That hurts! &7&o(Silver burns a Vampire's skin. Item Dropped.)"
+
+stoptime:
+  experienceinsufficient: "&eYou don't have the required energy to use &6&lStop Time&e! &7&o(Req: 30 XP Levels)"
+  # The chat message sent to the vampire who activated the ability when the Stop Time effect begins.
+  vampiremessage: "&eYou have stopped time! &7&o(All entities in a radius of 50 blocks except you can not move for 10 seconds from now.)"
+  # The chat message sent to the vampire who activated the ability when the Stop Time effect ends.
+  vampireendmessage: "&eTime has started again. &7&o(All entities in a radius of 50 blocks except you can now act freely.)"
+  # The chat message sent to the vampire who previously activated the ability, once the cooldown ends.
+  # (the plugin's default message is "&eYou can now stop time.")
+  ready: "&eYou can now stop time."
+  # The chat messages a Vampire that is in the Stop Time ability's range when activated.
+  # (The Vampire receiving these messages is not the one who activated the ability)
+  vampirenotaffected:
+    # The chat message sent to the unaffected vampires when the Stop Time effect begins.
+    # (the plugin's default message is "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)")
+    initialmessage: "&eTime has been stopped, but you are not affected! &7&o(Vampires are not affected by &6&lStop Time&7&o)"
+    # The chat message sent to the unaffected vampires when the Stop Time effect ends.
+    # (the plugin's default message is "&6&lStop Time&e effect has ended.")
+    finalmessage: "&6&lStop Time&e effect has ended."
+  # The chat message sent to the affected players when the Stop Time effect begins.
+  # (the plugin's default message is "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)")
+  playerinitialmessage: "&eTime has been stopped! &7&o(You cannot move for 10 seconds from now...)"
+  # The chat message sent to the affected players when the Stop Time effect ends.
+  # (the plugin's default message is "&eStop Time effect has ended. &7&o(You can now move again.)")
+  playerfinalmessage: "&eStop Time effect has ended. &7&o(You can now move again.)"
+  # The chat message sent to the player who is forced to drop the item (Only VAMPIRES can have the Stop Time Clock in their inventory).
+  # (the plugin's default message is "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)")
+  playerdropstoptimeclock: "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)"
+  #
+  #
+  donthaveability: "&eYou can't use this... &7&o(This item works with the &6&lStop Time&7&o ability.)"
+  #
+  #
+  cooldown: "&6&lStop Time &eis on cooldown, you can not use it."
+
+itemrestoration:
+  #a
+  #TODO COMMENT
+  experienceinsufficient: "&eYou don't have the required energy to use &d&lItem Restoration&e! &7&o(Req: 10 XP Levels)"
+  #
+  #
+  itemfixed: "&eYour item's durability was restored thanks to your ability!"
+  #
+  #
+  ready: "&eYou can now fix another item."
+  #
+  #
+  playerdroprestorationrod: "&eYou don't know how to use this... &7&o(This item is accessible to Vampires only. Item Dropped.)"
+  #
+  #
+  donthaveability: "&eYou can't use this... &7&o(This item works with the &d&lItem Restoration&7&o ability.)"
+  #
+  #
+  cooldown: "&d&lItem Restoration &eis on cooldown, you can not use it."
+  #
+  #
+  alreadyfixed: "&eThat item doesn't need to be fixed."
+
+vampiresundamage:
+  # The title of the screen message displayed to the vampire exposed to sunlight.
+  # (the plugin's default message is "&e&lYOU ARE EXPOSED TO SUNLIGHT!")
+  titlemessage: "&e&lYOU ARE EXPOSED TO SUNLIGHT!"
+  # The subtitle of the screen message displayed to the vampire exposed to sunlight.
+  # (the plugin's default message is "&6HURRY UP AND FIND COVER!")
+  subtitlemessage:  "&6HURRY UP AND FIND COVER!"
+  # The chat message sent publicly on the event of a vampire dead due to sunlight exposure.
+  # In this case, "[displayname]" will be the dead vampire's.
+  # (the plugin's default message is "&eThe sunlight burned [displayname] &eaway...")
+  deathmessage: "&eThe sunlight burned [displayname] &eaway..."
+
+# The chat messages sent to a vampire when he bites an entity to gain food levels.
+# (the vampire must have his main hand empty when hitting an entity to trigger the biting action)
+vampirebitingmessage:
+  # The chat message sent to the vampire when he eats normal food, cake block included.
+  eatingfooditem: "&cYou only drink blood, now."
+  drinkingmilk: "&4Only Death can clean a Vampire from his sins."
+  bitingfoodentity: ""
+  bitingenemyentity: "&cUgh, this tastes horrible! &7&o(You can't drink blood from this entity. You got a Malus.)"
+
+transformation:
+  ability:
+    stoptime: "&eYour ability is &6&lStop Time&e!"
+    itemrestoration: "&eYour ability is &d&lItem Restoration&e!"

@@ -1,6 +1,0 @@
-name: VampireS
-main: org.luca.VampireS.MainClass
-version: 1.0
-api-version: 1.13
-commands:
-  vampires:

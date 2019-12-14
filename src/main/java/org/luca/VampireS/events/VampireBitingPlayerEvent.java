@@ -7,14 +7,14 @@ public class VampireBitingPlayerEvent extends VampireBitingEvent {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
     /**
-     * 
+     *
      * @param vampire the biter
      * @param target the bit
      */
     public VampireBitingPlayerEvent(Player vampire, Player target) {
     	super(vampire, target);
     }
-    
+
     /**
      * @return the bit player
      */

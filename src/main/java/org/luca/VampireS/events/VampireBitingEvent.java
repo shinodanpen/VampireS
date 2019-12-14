@@ -14,7 +14,7 @@ public class VampireBitingEvent extends PlayerEvent implements Cancellable {
 
     public VampireBitingEvent(Player vampire, Entity target) {
     	super(vampire);
-    	
+
     	this.target = target;
         this.cancelled = false;
     }

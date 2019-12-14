@@ -1,4 +1,4 @@
-package org.luca.VampireS;
+package org.luca.VampireS.listeners;
 
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -11,18 +11,19 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.luca.VampireS.VampireSPlugin;
 
 public class OnStonemaskUse implements Listener {	
 	
-	private final MainClass plugin;
+	private final VampireSPlugin plugin;
 	
-	public OnStonemaskUse(MainClass plugin) {
+	public OnStonemaskUse(VampireSPlugin plugin) {
 		this.plugin = plugin;
 	}
 	
 	@EventHandler
 	public void onStonemaskSwap(InventoryClickEvent e) {
-		if(!plugin.getConfig().getBoolean("stonemask.use")) {
+		if(!plugin.getConfig().isStonemaskUse()) {
 			return; // If it's false the plugin doesn't execute the function
 		}
 		
@@ -33,7 +34,7 @@ public class OnStonemaskUse implements Listener {
 		if(e.getAction() == InventoryAction.PLACE_ALL
 				&& e.getSlotType() == SlotType.ARMOR 
 				&& e.getSlot() == 39 
-				&& plugin.isMask(cItem)) {
+				&& plugin.getItemManager().isMask(cItem)) {
 			e.setResult(Result.DENY);
 			player.getInventory().setHelmet(cItem);
 			player.setItemOnCursor(null);
@@ -42,7 +43,7 @@ public class OnStonemaskUse implements Listener {
 		if(e.getAction() == InventoryAction.NOTHING
 				&& e.getSlotType() == SlotType.ARMOR 
 				&& e.getSlot() == 39 
-				&& plugin.isMask(cItem)) {
+				&& plugin.getItemManager().isMask(cItem)) {
 			e.setResult(Result.DENY);
 			ItemStack helmet = player.getInventory().getHelmet();
 			player.getInventory().setHelmet(cItem);
@@ -52,7 +53,7 @@ public class OnStonemaskUse implements Listener {
 		if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY 
 				&& e.getSlotType() != SlotType.ARMOR
 				&& player.getInventory().getHelmet() == null
-				&& plugin.isMask(item)) {
+				&& plugin.getItemManager().isMask(item)) {
 			e.setResult(Result.DENY);
 			player.getInventory().setHelmet(item);
 			e.getClickedInventory().setItem(e.getSlot(), null);
@@ -61,13 +62,13 @@ public class OnStonemaskUse implements Listener {
 	
 	@EventHandler
 	public void onStonemaskEquip(PlayerInteractEvent e) {	
-		if(!plugin.getConfig().getBoolean("stonemask.use")) {
+		if(!plugin.getConfig().isStonemaskUse()) {
 			return; // If it's false the plugin doesn't execute the function
 		}
 		Player player = e.getPlayer();	
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if(plugin.isMask(item)) {
+			if(plugin.getItemManager().isMask(item)) {
 				ItemStack helmet = player.getInventory().getHelmet();
 				if(helmet == null) { // Set as helmet only if the helmet slot is empty
 					player.getInventory().setHelmet(item);

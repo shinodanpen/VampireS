@@ -11,8 +11,16 @@
     <dependencies>
         <dependency>
             <groupId>spigotmc.org</groupId>
-            <artifactId>1.13.2</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <artifactId>1.14</artifactId>
+            <version>1.14</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- SuperApiX -->
+        <dependency>
+            <groupId>org.valdi</groupId>
+            <artifactId>SuperApiX-bukkit</artifactId>
+            <version>3.5.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -21,12 +29,40 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
             <version>3.7.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <defaultGoal>clean package install</defaultGoal>
-        <finalName>${project.artifactId} v${project.version}</finalName>
+        <defaultGoal>clean install</defaultGoal>
+        <finalName>${project.name} v${project.version}</finalName>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>locales</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/resources/locales</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>web</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/resources/web</directory>
+                <includes>
+                    <include>*.zip</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

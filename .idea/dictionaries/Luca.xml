@@ -1,9 +1,26 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Luca">
     <words>
+      <w>bukkit</w>
       <w>cdisabled</w>
       <w>cooldown</w>
+      <w>displayname</w>
+      <w>godmode</w>
       <w>minecraft</w>
+      <w>oinflicting</w>
+      <w>resourcepack</w>
+      <w>silversword</w>
+      <w>silverswordlore</w>
+      <w>stonemask</w>
+      <w>stonemasklore</w>
+      <w>stoptime</w>
+      <w>stoptimeclock</w>
+      <w>stoptimeclocklore</w>
+      <w>stringa</w>
+      <w>subtitlemessage</w>
+      <w>titlemessage</w>
+      <w>vampiredatabase</w>
+      <w>vampiresundamage</w>
     </words>
   </dictionary>
 </component>

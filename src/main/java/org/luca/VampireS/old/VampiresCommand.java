@@ -1,4 +1,4 @@
-package org.luca.VampireS;
+package org.luca.VampireS.old;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,23 +24,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import org.luca.VampireS.listeners.OnStonemaskActivation;
 
-public class VampiresCommand implements CommandExecutor {
+@Deprecated
+public class VampiresCommand {
+
+}
+/*public class VampiresCommand implements CommandExecutor {
 	private final MainClass plugin;
 	
 	public VampiresCommand(MainClass plugin) {
 		this.plugin = plugin;
 	}
-	
 
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (args.length < 2) {
+			sender.sendMessage(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("commandmessage.incorrect-syntax",
+					"[prefix]&cInvalid command syntax.").replace("[prefix]", plugin.plPrefix)));
+			//sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "Usage:")); // prints the correct syntax
+			return false;
+		}
 		if(args.length  > 0 && args[0].equalsIgnoreCase("god")) {
 			if(sender instanceof Player) {
 				String perm = "vampires.godmode";
@@ -232,9 +237,40 @@ public class VampiresCommand implements CommandExecutor {
 				//The player has been found, let's give him the item
 				this.giveSilverswordToPlayer(player);
 			}
+
 			return true; // all right
 		}
-		return true; // tutto ok
+		return true; // all right
+	}
+
+	public List<String> onTabComplete(CommandSender sender, //registers the auto tab completer
+									  Command command,
+									  String alias,
+									  String[] args) {
+		if (command.getName().equalsIgnoreCase("vampires")) {  //your command name
+			List<String> l = new ArrayList<String>(); //makes a ArrayList
+
+
+			//define the possible possibilities for argument 1
+			if (args[0] == "give") {
+				l.add("stonemask"); //Possibility #1
+				l.add("silversword"); //Possibility #2
+				l.add("stoptimeclock"); //Possibility #3
+
+
+			}
+
+			//define the possible possibility's for argument 2
+            /else if (args.length == 2) {
+                l.add("a"); //Possibility #1
+                l.add("b"); //Possibility #2
+
+
+            }/
+		}
+		//this is a little confusing but just put it there
+		// it just returns NULL if absolutely nothing has happened
+		return null;
 	}
 	
 	public static ItemStack getMask() {
@@ -253,56 +289,5 @@ public class VampiresCommand implements CommandExecutor {
 		item.setItemMeta(meta); // I apply the properties to the item
 		return item;
 	}
-	/**
-	 * Give out item to an online player
-	 * @param player the player
-	 */
-	public void giveStonemaskToPlayer(Player player) {
-		player.getInventory().addItem(getMask());
-		//Material = list of Minecraft items
-	}
-	
-	public static ItemStack getSilverSword() {
-		ItemStack item = new ItemStack(Material.IRON_SWORD);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&e&lSilver Sword"));
-		List<String> silverswordlore = new ArrayList<>();
-		silverswordlore.add(ChatColor.translateAlternateColorCodes('&', "&7&oA sword that can damage only Vampires,"));
-		silverswordlore.add(ChatColor.translateAlternateColorCodes('&', "&7&oinflicting them more damage."));
-		meta.setLore(silverswordlore);
-		meta.setUnbreakable(true);
-		((Damageable) meta).setDamage(151);
-		item.setItemMeta(meta);
-		return item;
-	}
-	
-	public void giveSilverswordToPlayer(Player player) {
-		player.getInventory().addItem(getSilverSword());
-	}
-	
-	public static ItemStack getStopTimeClock() {
-		ItemStack item = new ItemStack(Material.CLOCK);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lStop Time Clock"));
-		List<String> stoptimeclocklore = new ArrayList<>();
-		stoptimeclocklore.add(ChatColor.translateAlternateColorCodes('&', "&7&oA clock that allows a Vampire"));
-		stoptimeclocklore.add(ChatColor.translateAlternateColorCodes('&', "&7&oto stop time for a 10 seconds period."));
-		meta.setLore(stoptimeclocklore);
-		meta.setUnbreakable(true);
-		((Damageable) meta).setDamage(151);
-		item.setItemMeta(meta);
-		
-		net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound tag = nmsItem.getOrCreateTag();
-		tag.setString("vampireS", UUID.randomUUID().toString());
-		nmsItem.setTag(tag);
-		
-		return CraftItemStack.asBukkitCopy(nmsItem);
-	}
-	
-	public void giveStopTimeClock(Player player) {
-		player.getInventory().addItem(getStopTimeClock());
-	}
 
-
-}
+}*/
