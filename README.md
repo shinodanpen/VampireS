@@ -1,2 +1,3 @@
 # VampireS
 
+Ambitious spigot plugin that aims to implement a fun concept of Vampirism along with some abilities exclusive to vampires, which may be inspired from Jojo's Bizarre Adventure...
